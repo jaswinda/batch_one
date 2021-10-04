@@ -1,3 +1,4 @@
+import 'package:batch_one/services/authentication.dart';
 import 'package:batch_one/view/components/my_field.dart';
 import 'package:batch_one/view/screens/signup.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,22 @@ class _LoginState extends State<Login> {
           ),
           MyField(isPassword: false, hint: 'Email', mycontroller: email),
           MyField(isPassword: true, hint: 'Password', mycontroller: password),
-          ElevatedButton(onPressed: () {}, child: Text('Login')),
+          ElevatedButton(
+              onPressed: () async {
+                var data = {
+                  'email': email.text,
+                  'password': password.text,
+                };
+                var response = await Authentication().login(data);
+                final snackBar =
+                    SnackBar(content: Text(response.body.toString()));
+
+// Find the ScaffoldMessenger in the widget tree
+// and use it to show a SnackBar.
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                print(response);
+              },
+              child: Text('Login')),
           const Text(
             "Don't Have account?",
           ),
