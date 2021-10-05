@@ -1,31 +1,30 @@
 import 'dart:convert';
+import 'package:batch_one/services/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Authentication {
   signUp(data) async {
-    final response =
-        await http.post(Uri.parse('http://192.168.1.70/test/signup.php'),
-            headers: {
-              "Accept": "application/json",
-              "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: data,
-            encoding: Encoding.getByName("utf-8"));
+    final response = await http.post(Uri.parse(signupApi),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: data,
+        encoding: Encoding.getByName("utf-8"));
 
     return response;
   }
 
   login(data) async {
     try {
-      final response =
-          await http.post(Uri.parse('http://192.168.1.70/test/login.php'),
-              headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded"
-              },
-              body: data,
-              encoding: Encoding.getByName("utf-8"));
+      final response = await http.post(Uri.parse(loginApi),
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: data,
+          encoding: Encoding.getByName("utf-8"));
 
       return response;
     } catch (e) {

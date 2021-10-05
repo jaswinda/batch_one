@@ -20,6 +20,11 @@ class _LoginState extends State<Login> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Image.asset(
+            'assets/images/logoa.png',
+            width: 100,
+            height: 100,
+          ),
           const Text(
             'Login',
             style: TextStyle(fontSize: 24),
@@ -35,20 +40,16 @@ class _LoginState extends State<Login> {
                 var response = await Authentication().login(data);
                 final snackBar =
                     SnackBar(content: Text(response.body.toString()));
-
-// Find the ScaffoldMessenger in the widget tree
-// and use it to show a SnackBar.
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                print(response);
               },
-              child: Text('Login')),
+              child: const Text('Login')),
           const Text(
             "Don't Have account?",
           ),
           InkWell(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return SignUp();
+                return const SignUp();
               }));
             },
             child: const Text(
