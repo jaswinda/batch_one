@@ -1,7 +1,6 @@
 import 'package:batch_one/services/authentication.dart';
 import 'package:batch_one/view/screens/home.dart';
 import 'package:batch_one/view/screens/login.dart';
-import 'package:batch_one/view/screens/signup.dart';
 import 'package:flutter/material.dart';
 
 class UserAuthChecker extends StatefulWidget {
@@ -37,9 +36,18 @@ class _UserAuthCheckerState extends State<UserAuthChecker> {
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
     return Scaffold(
-      body: const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+        body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Image.asset(
+            'assets/images/logoa.png',
+            width: 100,
+            height: 100,
+          ),
+        ),
+        Center(child: CircularProgressIndicator())
+      ],
+    ));
   }
 }
