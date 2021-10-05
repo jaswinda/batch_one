@@ -37,6 +37,12 @@ class Authentication {
     await prefs.setString('token', token);
   }
 
+  getUserToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    return token;
+  }
+
   logout() async {
     await logoutFromServer();
     SharedPreferences preferences = await SharedPreferences.getInstance();
