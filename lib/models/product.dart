@@ -12,11 +12,11 @@ String productToJson(List<Product> data) =>
 
 class Product {
   Product({
-    this.id,
-    this.name,
-    this.despcription,
-    this.image,
-    this.price,
+    required this.id,
+    required this.name,
+    required this.despcription,
+    required this.image,
+    required this.price,
   });
 
   String id;
