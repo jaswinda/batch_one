@@ -1,6 +1,7 @@
 import 'package:batch_one/services/authentication.dart';
 import 'package:batch_one/view/screens/products_screen.dart';
 import 'package:batch_one/view/screens/user_auth_checker.dart';
+import 'package:batch_one/view/screens/user_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -15,28 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Widget> _buildScreens() {
-    return [
-      ProductScreen(),
-      Container(),
-      Container(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: ElevatedButton(
-                onPressed: () async {
-                  await Authentication().logout();
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              UserAuthChecker()));
-                },
-                child: Text('Logout')),
-          ),
-        ],
-      ))
-    ];
+    return [ProductScreen(), Container(), UserScreen()];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {

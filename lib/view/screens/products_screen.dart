@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:batch_one/models/product.dart';
 import 'package:batch_one/services/authentication.dart';
 import 'package:batch_one/services/products_services.dart';
@@ -26,11 +25,14 @@ class _ProductScreenState extends State<ProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        buildFloatingSearchBar(context),
-      ],
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          // content(),
+          buildFloatingSearchBar(context),
+        ],
+      ),
     );
   }
 
@@ -38,7 +40,7 @@ class _ProductScreenState extends State<ProductScreen> {
     setState(() {
       isLoading = true;
     });
-    List<Product> list = [];
+
     String token = await Authentication().getUserToken();
     Map data = {
       'token': token,
@@ -50,8 +52,8 @@ class _ProductScreenState extends State<ProductScreen> {
         if (_body['success']) {
           List jsonResponse = _body["data"];
           list = jsonResponse.map((data) => Product.fromJson(data)).toList();
+          // setState(() {});
           print(list);
-          setState(() {});
         } else {
           String message = _body['message'];
           if (message == "UnAuthenticated") {
@@ -132,18 +134,35 @@ class _ProductScreenState extends State<ProductScreen> {
   Widget content() {
     return isLoading
         ? const Center(child: CircularProgressIndicator())
-        : Container(
-            color: Colors.blue[50],
-            child: Column(
-                children: list.map((product) {
-              return Container(
-                height: 200,
-                child: ProductTile(
-                    productName: product.name,
-                    productImage: product.image,
-                    productDesp: product.despcription,
-                    productPrice: product.price),
-              );
-            }).toList()));
+        : Padding(
+            padding: const EdgeInsets.only(top: 70.0),
+            child: GridView.count(
+                crossAxisCount: 2,
+                children: list
+                    .map((prduct) => Stack(
+                          children: [
+                            ProductTile(
+                                productName: prduct.name,
+                                productImage: prduct.image,
+                                productDesp: prduct.despcription,
+                                productPrice: prduct.price),
+                            Positioned(
+                                right: 20,
+                                top: 10,
+                                child: CircleAvatar(
+                                    child: IconButton(
+                                        onPressed: () {
+                                          // double price = double.parse(prduct.price);
+                                          // setState(() {
+                                          //   order_qnty = 1;
+                                          //   order_total = price * order_qnty;
+                                          // });
+                                          // _modalBottomSheetMenu(prduct);
+                                        },
+                                        icon: const Icon(Icons.shopping_cart))))
+                          ],
+                        ))
+                    .toList()),
+          );
   }
 }
