@@ -39,6 +39,7 @@ dependencies:
   material_floating_search_bar: ^0.3.6
   persistent_bottom_nav_bar: ^4.0.2
   badges: ^2.0.1
+  localstorage: ^4.0.0+1
 
 dev_dependencies:
   flutter_test:

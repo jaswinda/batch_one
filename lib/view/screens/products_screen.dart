@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:badges/badges.dart';
 import 'package:batch_one/models/product.dart';
 import 'package:batch_one/services/authentication.dart';
+import 'package:batch_one/services/cart_service.dart';
 import 'package:batch_one/services/products_services.dart';
 import 'package:batch_one/view/screens/login.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,12 @@ class _ProductScreenState extends State<ProductScreen> {
   void initState() {
     super.initState();
     fetchAllProducts();
+    fetchCartItems();
+  }
+
+  fetchCartItems() async {
+    cart = await CartService().getCartItems();
+    setState(() {});
   }
 
   @override
@@ -107,7 +114,7 @@ class _ProductScreenState extends State<ProductScreen> {
             showIfOpened: false,
             child: Badge(
               badgeContent: Text(cart.length.toString(),
-                  style: TextStyle(color: Colors.white)),
+                  style: const TextStyle(color: Colors.white)),
               child: Icon(
                 Icons.shopping_bag,
               ),
@@ -196,6 +203,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                     child: IconButton(
                                         onPressed: () {
                                           cart[prduct.id] = prduct;
+                                          CartService().addToCart(cart);
                                           setState(() {});
                                         },
                                         icon: const Icon(Icons.shopping_cart))))
