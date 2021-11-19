@@ -4,6 +4,7 @@ import 'package:batch_one/models/product.dart';
 import 'package:batch_one/services/authentication.dart';
 import 'package:batch_one/services/cart_service.dart';
 import 'package:batch_one/services/products_services.dart';
+import 'package:batch_one/view/screens/cart_screen.dart';
 import 'package:batch_one/view/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -112,11 +113,21 @@ class _ProductScreenState extends State<ProductScreen> {
       actions: [
         FloatingSearchBarAction(
             showIfOpened: false,
-            child: Badge(
-              badgeContent: Text(cart.length.toString(),
-                  style: const TextStyle(color: Colors.white)),
-              child: Icon(
-                Icons.shopping_bag,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CartScreen(),
+                  ),
+                );
+              },
+              child: Badge(
+                badgeContent: Text(cart.length.toString(),
+                    style: const TextStyle(color: Colors.white)),
+                child: Icon(
+                  Icons.shopping_bag,
+                ),
               ),
             )),
         FloatingSearchBarAction.searchToClear(

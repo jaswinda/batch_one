@@ -1,21 +1,20 @@
 import 'package:localstorage/localstorage.dart';
 
 class CartService {
-  final LocalStorage storage = new LocalStorage('cart');
+  final LocalStorage storage = new LocalStorage('items');
   addToCart(Map<dynamic, dynamic> items) {
-    print(items);
-    storage.setItem("cart", items);
+    storage.setItem("items", items);
   }
 
   Future<Map<String, dynamic>> getCartItems() async {
-    print("before ready: " + storage.getItem("cart").toString());
+    print("before ready: " + storage.getItem("items").toString());
 
     //wait until ready
     await storage.ready;
 
     //this will now print 0
-    print("after ready: " + storage.getItem("cart").toString());
-    return storage.getItem("cart") ?? {};
+    print("after ready: " + storage.getItem("items").toString());
+    return storage.getItem("items") ?? {};
   }
 
   clearCart() {

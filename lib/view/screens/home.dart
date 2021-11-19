@@ -1,10 +1,7 @@
-import 'package:batch_one/services/authentication.dart';
 import 'package:batch_one/view/screens/products_screen.dart';
-import 'package:batch_one/view/screens/user_auth_checker.dart';
 import 'package:batch_one/view/screens/user_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Home extends StatefulWidget {
