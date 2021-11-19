@@ -1,8 +1,8 @@
 import 'dart:convert';
+import 'package:badges/badges.dart';
 import 'package:batch_one/models/product.dart';
 import 'package:batch_one/services/authentication.dart';
 import 'package:batch_one/services/products_services.dart';
-import 'package:batch_one/view/components/product_tile.dart';
 import 'package:batch_one/view/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -16,6 +16,7 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   bool isLoading = true;
+  Map cart = {};
   List<Product> list = [];
   @override
   void initState() {
@@ -53,7 +54,7 @@ class _ProductScreenState extends State<ProductScreen> {
           List jsonResponse = _body["data"];
           list = jsonResponse.map((data) => Product.fromJson(data)).toList();
           // setState(() {});
-          print(list);
+          print('list ' + list.toString());
         } else {
           String message = _body['message'];
           if (message == "UnAuthenticated") {
@@ -103,12 +104,14 @@ class _ProductScreenState extends State<ProductScreen> {
       transition: CircularFloatingSearchBarTransition(),
       actions: [
         FloatingSearchBarAction(
-          showIfOpened: false,
-          child: CircularButton(
-            icon: const Icon(Icons.place),
-            onPressed: () {},
-          ),
-        ),
+            showIfOpened: false,
+            child: Badge(
+              badgeContent: Text(cart.length.toString(),
+                  style: TextStyle(color: Colors.white)),
+              child: Icon(
+                Icons.shopping_bag,
+              ),
+            )),
         FloatingSearchBarAction.searchToClear(
           showIfClosed: false,
         ),
@@ -141,23 +144,59 @@ class _ProductScreenState extends State<ProductScreen> {
                 children: list
                     .map((prduct) => Stack(
                           children: [
-                            ProductTile(
-                                productName: prduct.name,
-                                productImage: prduct.image,
-                                productDesp: prduct.despcription,
-                                productPrice: prduct.price),
+                            GestureDetector(
+                              onTap: () {},
+                              child: Card(
+                                color: Colors.blue[50],
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Image.network(
+                                                prduct.image,
+                                                fit: BoxFit.fitWidth,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Text(
+                                        prduct.name,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(prduct.despcription,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: const TextStyle(fontSize: 12)),
+                                      Text(prduct.price.toString(),
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.bold))
+                                    ],
+                                  ),
+                                ),
+                                elevation: 10,
+                                shadowColor: Colors.blue,
+                                margin: const EdgeInsets.all(10),
+                              ),
+                            ),
                             Positioned(
                                 right: 20,
                                 top: 10,
                                 child: CircleAvatar(
                                     child: IconButton(
                                         onPressed: () {
-                                          // double price = double.parse(prduct.price);
-                                          // setState(() {
-                                          //   order_qnty = 1;
-                                          //   order_total = price * order_qnty;
-                                          // });
-                                          // _modalBottomSheetMenu(prduct);
+                                          cart[prduct.id] = prduct;
+                                          setState(() {});
                                         },
                                         icon: const Icon(Icons.shopping_cart))))
                           ],
