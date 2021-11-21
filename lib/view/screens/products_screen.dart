@@ -19,6 +19,8 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   bool isLoading = true;
   Map cart = {};
+  int order_qnty = 1;
+  double order_total = 0;
   List<Product> list = [];
   @override
   void initState() {
@@ -213,14 +215,143 @@ class _ProductScreenState extends State<ProductScreen> {
                                 child: CircleAvatar(
                                     child: IconButton(
                                         onPressed: () {
-                                          cart[prduct.id] = prduct;
-                                          CartService().addToCart(cart);
-                                          setState(() {});
+                                          // cart[prduct.id] = prduct;
+                                          // CartService().addToCart(cart);
+                                          // setState(() {});
+                                          _modalBottomSheetMenu(prduct);
                                         },
                                         icon: const Icon(Icons.shopping_cart))))
                           ],
                         ))
                     .toList()),
           );
+  }
+
+  _modalBottomSheetMenu(Product product) {
+    double price = double.parse(product.price);
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        builder: (builder) {
+          // to change the data
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              height: 350.0,
+              color:
+                  Colors.transparent, //could change this to Color(0xFF737373),
+              //so you don't have to change MaterialApp canvasColor
+              child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          topRight: Radius.circular(20.0))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Center(
+                          child: Text(
+                            product.name.toString().toUpperCase(),
+                            style: const TextStyle(
+                                fontSize: 24.0, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(product.image),
+                              ),
+                            ),
+                            Text(product.price),
+                            const Text(' X '),
+                            Text(order_qnty.toString()),
+                            const Text(' = '),
+                            Text(
+                              order_total.toString(),
+                              style: const TextStyle(
+                                  fontSize: 18.0, fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                        Container(
+                          color: Colors.grey[200],
+                          height: 50,
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    if (order_qnty != 1) {
+                                      setState(() {
+                                        order_qnty -= 1;
+                                        order_total = price * order_qnty;
+                                      });
+                                    }
+                                  },
+                                  icon: const Icon(Icons.remove),
+                                ),
+                                Text(
+                                  order_qnty.toString(),
+                                  style: const TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      order_qnty += 1;
+                                      order_total = price * order_qnty;
+                                    });
+                                  },
+                                  icon: const Icon(Icons.add),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  addProductToCart(product);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Add To Card')),
+                          ],
+                        )
+                      ],
+                    ),
+                  )),
+            );
+          });
+        });
+  }
+
+  addProductToCart(product) {
+    setState(() {
+      cart[product.id] = {
+        'productId': product.id,
+        'image': product.image,
+        'price': product.price,
+        'despcription': product.despcription,
+        'name': product.name,
+        'orderQuantity': order_qnty
+      };
+      CartService().addToCart(cart);
+    });
   }
 }
